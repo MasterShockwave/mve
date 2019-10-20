@@ -1,0 +1,26 @@
+trigger:
+- cmake
+
+pool:
+  vmImage: 'vs2017-win2016'
+  timeoutInMinutes: 90
+
+jobs:
+  - job: BuildMVE
+    timeoutInMinutes: 90
+    steps:
+    - script: |
+        git checkout remotes/origin/cmake
+        cd 3rdparty
+        cmake .
+        cmake --build . --config Release
+        cd ..
+        cmake .
+        cmake --build . --config Release
+        cmake --build . --target PACKAGE --config Release
+      env: 
+        CMAKE_GENERATOR: 'Visual Studio 15 2017 Win64'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'MVE-0.1.1-win64.zip'
+        artifactName: MVE
