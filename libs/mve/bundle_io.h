@@ -13,6 +13,7 @@
 #include <string>
 
 #include "mve/bundle.h"
+#include "mve/image.h"
 #include "mve/defines.h"
 
 MVE_NAMESPACE_BEGIN
@@ -32,10 +33,12 @@ save_mve_bundle (Bundle::ConstPtr bundle, std::string const& filename);
 /**
  * Per-camera NVM specific information.
  */
-struct NVMCameraInfo
+struct AdditionalCameraInfo
 {
-    /** Path the the original image file. */
+    /** Path the original image file. */
     std::string filename;
+    /** Path to a pre-computed depth map (optional). */
+    std::string depth_map_name;
     /** The single radial distortion parameter. */
     float radial_distortion;
 };
@@ -50,7 +53,7 @@ struct NVMCameraInfo
  */
 Bundle::Ptr
 load_nvm_bundle (std::string const& filename,
-    std::vector<NVMCameraInfo>* camera_info = nullptr);
+    std::vector<AdditionalCameraInfo>* camera_info = nullptr);
 
 /* ------------------ Support for Noah's Bundler  ----------------- */
 
@@ -79,6 +82,17 @@ load_photosynther_bundle (std::string const& filename);
 void
 save_photosynther_bundle (Bundle::ConstPtr bundle,
     std::string const& filename);
+
+/* -------------- Support for Colmap --------------- */
+
+Bundle::Ptr
+load_colmap_bundle (std::string const& workspace_path,
+    std::vector<AdditionalCameraInfo>* camera_info = nullptr);
+
+mve::FloatImage::Ptr
+load_colmap_depth_map (int scale, mve::CameraInfo& mve_cam, int original_width,
+    int original_height,
+    mve::AdditionalCameraInfo const& cam_info);
 
 MVE_NAMESPACE_END
 
