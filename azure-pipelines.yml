@@ -3,11 +3,11 @@ trigger:
 
 pool:
   vmImage: 'vs2017-win2016'
-  timeoutInMinutes: 90
+  timeoutInMinutes: 300
 
 jobs:
   - job: BuildMVE
-    timeoutInMinutes: 90
+    timeoutInMinutes: 300
     steps:
     - script: |
         git checkout remotes/origin/cmake
